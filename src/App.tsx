@@ -5,6 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { fetchBooks } from './store/slices/booksSlice';
 import { fetchUser } from './store/slices/userSlice';
 import { Book } from './types';
+import BooksList from './Components/BookList/BookList';
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,13 +42,7 @@ const App: React.FC = () => {
         <div>
           <p>{user.name}</p>
           <h1>Books</h1>
-          {books.map((book: Book) => (
-            <div key={book.id}>
-              <h3>{book.title}</h3>
-              <h4>{book.author}</h4>
-              <h5>{book.rating}</h5>
-            </div>
-          ))}
+          <BooksList />
         </div>
       )}
     </div>
