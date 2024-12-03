@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                              // Современный target
+    "lib": ["dom", "es6"],                        // Поддержка DOM и ES6 API
+    "jsx": "react-jsx",                           // Новая трансформация JSX
+    "module": "ES6",                              // Использование ES-модулей
+    "moduleResolution": "node",                  // Резолвинг модулей как в Node.js
+    "esModuleInterop": true,                     // Импорт CommonJS модулей
+    "skipLibCheck": true,                        // Пропуск проверки типов в node_modules
+    "resolveJsonModule": true,                   // Импорт JSON файлов
+    "allowSyntheticDefaultImports": true        // Поддержка синтетических импортов
+  },
+  "include": ["src", "src/**/*.scss", "src/global.d.ts"]
+}
