@@ -1,19 +1,20 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { RootState } from '../../store';
 import { logoutUser } from '../../store/slices/userSlice';
 import { GoBook } from 'react-icons/go';
 import { FaRegUser } from 'react-icons/fa6';
 import { MdFavoriteBorder } from 'react-icons/md';
 import { MdOutlineLogout } from 'react-icons/md';
+import { MdOutlineLogin } from "react-icons/md";
 
 import '../../assets/Fonts/fonts.scss'; //module overtake global styles
-let classes = require('./Header.module.scss'); // Импорт модульных стилей
-
+let classes = require('./Header.module.scss'); 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); 
   const user = useSelector((state: RootState) => state.user);
 
   const handleLogout = () => {
@@ -28,7 +29,7 @@ const Header: React.FC = () => {
         <Link to="/"><h1 className={classes.logo__text}>Zionet BookStore</h1></Link>
       </div>
       <div className={classes.actions}>
-        {user ? (
+        {user.id ? (
           <div className={classes.user}>
             <div className={classes.profile}>
               <div className={classes.icon}>
@@ -46,9 +47,12 @@ const Header: React.FC = () => {
             </Link>
           </div>
         ) : (
-          <button className={classes.login} onClick={() => navigate('/login')}>
-            <p className={classes.login__text}>Login</p>
-          </button>
+          location.pathname !== '/login' && (
+            <button className={classes.login} onClick={() => navigate('/login')}>
+              <MdOutlineLogin />
+              <p className={classes.login__text}>Login</p>
+            </button>
+          )
         )}
       </div>
     </header>

@@ -8,6 +8,7 @@ import { fetchUser } from './store/slices/userSlice';
 import BooksList from './Components/BookList/BookList';
 import Header from './Components/Header/Header';
 import Home from './pages/Home/Home';
+import Login from './pages/Login/Login';
 
 // import Favorites from './Components/Favorites/Favorites';
 // import Login from './Components/Login/Login';
@@ -27,7 +28,6 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchBooks());
-    dispatch(fetchUser());
   }, [dispatch]);
 
   if (booksError || userError) {
@@ -42,7 +42,7 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        {booksLoading || userLoading ? (
+        {booksLoading ? (
           <CircularProgress />
         ) : (
           <div>
@@ -51,8 +51,8 @@ const App: React.FC = () => {
               {/* <Route
                 path="/favorites"
                 element={user ? <Favorites /> : <Navigate to="/login" />}
-              />
-              <Route path="/login" element={<Login />} /> */}
+              /> */}
+              <Route path="/login" element={<Login />} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>

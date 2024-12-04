@@ -9,6 +9,7 @@ let classes = require('./Booklist.module.scss')
 const BookList: React.FC = () => {
   const books = useSelector((state: RootState) => state.books.books);
   const booksLoading = useSelector((state: RootState) => state.books.loading);
+  console.log(books)
 
   if (booksLoading) {
     return <CircularProgress />;
