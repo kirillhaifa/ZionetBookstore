@@ -1,0 +1,121 @@
+.header {
+  position: relative; /* Устанавливаем позиционирование для работы с ::after */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #000;
+  z-index: 1;
+
+  background-image: url('../../assets/Images/Library-bookshelf-books_1920x1200.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  &::after {
+    content: ''; 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: -1;
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+@media (max-width: 700px) {
+  .logo {
+    display: flex;
+    flex-direction: column;
+
+  }
+}
+
+.header__logo a {
+  text-decoration: none;
+  color: #000;
+}
+
+.logo__icon {
+  width: clamp(20px, 5vw, 200px);
+  height: clamp(20px, 5vw, 200px);
+}
+
+.logo__text {
+  font-size: clamp(5px, 5vw, 50px);
+}
+ 
+.header__actions {
+  display: flex;
+  align-items: center;
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header__profile {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.header__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.header__username {
+  font-size: 14px;
+  color: #333;
+}
+
+.logout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+.favorites {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.header__login:hover,
+.header__logout:hover,
+.header__favorites:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 700px) {
+  .username, .favorites__text, .login__text, .logout__text {
+    display: none;
+  }
+}

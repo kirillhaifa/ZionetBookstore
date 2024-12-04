@@ -20,10 +20,18 @@ const userSlice = createSlice({
     id: null,
     name: null,
     favorites: [],
-    loading: false, // Статус загрузки
-    error: null // Ошибка при запросе
+    loading: false,
+    error: null
   },
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.id = null;
+      state.name = null;
+      state.favorites = [];
+      state.loading = false;
+      state.error = null;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
@@ -42,5 +50,8 @@ const userSlice = createSlice({
       });
   }
 });
+
+// Экспортируем действие для логаута
+export const { logoutUser } = userSlice.actions;
 
 export default userSlice.reducer;

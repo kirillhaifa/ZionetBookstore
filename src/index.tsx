@@ -3,8 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './store';
-
-// import store from './store';
+import './styles/normalaizer.scss';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -15,4 +14,5 @@ root.render(
       <App />
     </Provider>
   </React.StrictMode>,
+  document.getElementById('root')
 );

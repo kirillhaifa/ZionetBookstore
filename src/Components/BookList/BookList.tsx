@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import BookCard from '../BookCard/BookCard';
 import { Grid2 } from '@mui/material';
+let classes = require('./Booklist.module.scss')
 
 const BookList: React.FC = () => {
   const books = useSelector((state: RootState) => state.books.books);
@@ -14,11 +15,13 @@ const BookList: React.FC = () => {
   }
 
   return (
-    <Grid2 container spacing={1}>
-      {books.map((book) => (
-        <BookCard book={book} key={book.id}/>
-      ))}
-    </Grid2>
+    <div className={classes.container}>
+      <Grid2 container spacing={1} justifyContent="center">
+        {books.map((book) => (
+          <BookCard book={book} key={book.id} />
+        ))}
+      </Grid2>
+    </div>
   );
 };
 
