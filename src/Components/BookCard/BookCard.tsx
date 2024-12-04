@@ -15,7 +15,8 @@ const BookCard = ({ book }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.user.favorites);
-
+  const userId = useSelector((state: RootState) => state.user.id);
+ 
   const isFavorite = favorites.includes(book.id);
 
   const handleCardClick = () => {
@@ -23,13 +24,16 @@ const BookCard = ({ book }) => {
   };
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation(); // Останавливаем всплытие события
-
-    if (isFavorite) {
-      dispatch(removeFavorite(book.id));
-    } else {
-      dispatch(addFavorite(book.id));
+    event.stopPropagation();
+  
+    if (!userId) {
+      navigate('/login');
+      return; // Завершаем выполнение функции
     }
+  
+    isFavorite
+      ? dispatch(removeFavorite(book.id))
+      : dispatch(addFavorite(book.id));
   };
 
   return (
