@@ -1,3 +1,19 @@
 .card {
-  width: clamp(250px, 20%, 300px)
+  width: clamp(250px, 20%, 300px);
+  cursor: pointer;
+}
+
+.favorites__button {
+  background-color: transparent;
+  padding-top: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.favorites__icon_choosen {
+  fill: red
 }

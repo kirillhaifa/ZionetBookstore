@@ -7,14 +7,14 @@ import { GoBook } from 'react-icons/go';
 import { FaRegUser } from 'react-icons/fa6';
 import { MdFavoriteBorder } from 'react-icons/md';
 import { MdOutlineLogout } from 'react-icons/md';
-import { MdOutlineLogin } from "react-icons/md";
+import { MdOutlineLogin } from 'react-icons/md';
 
 import '../../assets/Fonts/fonts.scss'; //module overtake global styles
-let classes = require('./Header.module.scss'); 
+let classes = require('./Header.module.scss');
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const user = useSelector((state: RootState) => state.user);
 
   const handleLogout = () => {
@@ -22,19 +22,21 @@ const Header: React.FC = () => {
     navigate('/');
   };
 
+  console.log(user.favorites);
+
   return (
     <header className={classes.header}>
-      <div className={classes.logo}>
+      <Link to="/" className={classes.logo}>
         <GoBook className={classes.logo__icon} />
-        <Link to="/"><h1 className={classes.logo__text}>Zionet BookStore</h1></Link>
-      </div>
+        <h1 className={classes.logo__text}>Zionet BookStore</h1>
+      </Link>
       <div className={classes.actions}>
         {user.id ? (
           <div className={classes.user}>
             <div className={classes.profile}>
-              <div className={classes.icon}>
+              <button className={classes.icon}>
                 <FaRegUser className={classes.avatar} />
-              </div>
+              </button>
               <span className={classes.username}>{user.name}</span>
             </div>
             <button className={classes.logout} onClick={handleLogout}>
@@ -48,7 +50,10 @@ const Header: React.FC = () => {
           </div>
         ) : (
           location.pathname !== '/login' && (
-            <button className={classes.login} onClick={() => navigate('/login')}>
+            <button
+              className={classes.login}
+              onClick={() => navigate('/login')}
+            >
               <MdOutlineLogin />
               <p className={classes.login__text}>Login</p>
             </button>

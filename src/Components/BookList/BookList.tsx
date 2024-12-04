@@ -1,18 +1,22 @@
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import BookCard from '../BookCard/BookCard';
 import { Grid2 } from '@mui/material';
-let classes = require('./Booklist.module.scss')
+import { Book } from '../../types';
+let classes = require('./BookList.module.scss');
 
-const BookList: React.FC = () => {
-  const books = useSelector((state: RootState) => state.books.books);
-  const booksLoading = useSelector((state: RootState) => state.books.loading);
-  console.log(books)
+interface BookListProps {
+  books: Book[]; // Массив книг
+  isLoading?: boolean; // Индикатор загрузки
+}
 
-  if (booksLoading) {
-    return <CircularProgress />;
+const BookList: React.FC<BookListProps> = ({ books, isLoading = false }) => {
+  if (isLoading) {
+    return (
+      <div className={classes.loading}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (

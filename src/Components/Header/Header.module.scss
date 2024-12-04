@@ -43,6 +43,10 @@
   color: #000;
 }
 
+.icon {
+  background-color: transparent;
+}
+ 
 .logo__icon {
   width: clamp(20px, 5vw, 200px);
   height: clamp(20px, 5vw, 200px);
