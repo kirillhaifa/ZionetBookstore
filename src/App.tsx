@@ -36,7 +36,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchBooks());
-    dispatch(fetchUser());
+    // dispatch(fetchUser());
   }, [dispatch]);
 
   if (booksError || userError) {

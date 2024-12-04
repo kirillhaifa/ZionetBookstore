@@ -13,14 +13,14 @@ const Favorities = () => {
   // Проверка: если пользователь не авторизован
   if (!user.id) {
     return (
-      <>
+      <div className={classes.container}>
         <Header />
-        <div>
-          <h2>Please log in to manage your favorites</h2>
-          <Link to="/login">Login</Link>
+        <div className={classes.no_user_container}>
+            <h2>Please log in to manage your favorites</h2>
+            <Link to="/login">Login</Link>
         </div>
         <Footer />
-      </>
+      </div>
     );
   }
 
