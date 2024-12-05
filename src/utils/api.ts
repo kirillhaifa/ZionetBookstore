@@ -1,4 +1,3 @@
-// utils/api.js
 export const fetchData = async (url, onSuccess, onError) => {
   try {
     const response = await fetch(url);
