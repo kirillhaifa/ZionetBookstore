@@ -36,7 +36,11 @@ const App: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchBooks());
-    // dispatch(fetchUser());
+
+    const isAuthorized = document.cookie.includes("authorized=true");
+    if (isAuthorized) {
+      dispatch(fetchUser());
+    }
   }, [dispatch]);
 
   if (booksError || userError) {

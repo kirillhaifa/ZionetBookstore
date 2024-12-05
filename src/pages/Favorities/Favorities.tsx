@@ -4,6 +4,7 @@ import BookList from '../../Components/BookList/BookList';
 import Footer from '../../Components/Footer/Footer';
 import Header from '../../Components/Header/Header';
 import { RootState } from '../../store';
+import Navigation from '../../Components/Navigation/Navigation';
 let classes = require('./Favorities.module.scss');
 
 const Favorities = () => {
@@ -16,8 +17,8 @@ const Favorities = () => {
       <div className={classes.container}>
         <Header />
         <div className={classes.no_user_container}>
-            <h2>Please log in to manage your favorites</h2>
-            <Link to="/login">Login</Link>
+          <h2>Please log in to manage your favorites</h2>
+          <Link to="/login">Login</Link>
         </div>
         <Footer />
       </div>
@@ -31,10 +32,17 @@ const Favorities = () => {
 
   return (
     <div className={classes.container}>
-      <Header />
-      <div className={classes.favorities__container}>
-        <h2 className={classes.text}>Your favorite books</h2>
-        <BookList books={favoritiesBooks} />
+      <div className={classes.content}>
+        <Header />
+        <Navigation />
+        {favoritiesBooks.length !== 0 ? (
+          <div className={classes.favorities__container}>
+            <h2 className={classes.text}>Your favorite books</h2>
+            <BookList books={favoritiesBooks} />
+          </div>
+        ) : (
+          <h2 className={classes.text}>No favorite books yet</h2>
+        )}
       </div>
       <Footer />
     </div>

@@ -18,7 +18,7 @@ const BookList: React.FC<BookListProps> = ({ books, isLoading = false }) => {
       </div>
     );
   }
-
+  console.log(books)
   return (
     <div className={classes.container}>
       <Grid2 container spacing={1} justifyContent="center">

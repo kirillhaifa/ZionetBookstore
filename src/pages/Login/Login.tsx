@@ -2,16 +2,20 @@ import BookList from '../../Components/BookList/BookList';
 import Footer from '../../Components/Footer/Footer';
 import Header from '../../Components/Header/Header';
 import LoginForm from '../../Components/Login/Login';
-let classes = require('./Login.module.scss')
+import Navigation from '../../Components/Navigation/Navigation';
+let classes = require('./Login.module.scss');
 
-const Home = () => {
+const LoginPage = () => {
   return (
     <div className={classes.container}>
-      <Header />
-      <LoginForm />
+      <div className={classes.content}>
+        <Header />
+        <Navigation />
+        <LoginForm />
+      </div>
       <Footer />
     </div>
   );
 };
 
-export default Home
+export default LoginPage;

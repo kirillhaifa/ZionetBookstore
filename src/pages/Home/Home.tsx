@@ -3,6 +3,7 @@ import BookList from '../../Components/BookList/BookList';
 import Footer from '../../Components/Footer/Footer';
 import Header from '../../Components/Header/Header';
 import { RootState } from '../../store';
+import Navigation from '../../Components/Navigation/Navigation';
 
 const Home = () => {
   const books = useSelector((state: RootState) => state.books.books);
@@ -10,6 +11,7 @@ const Home = () => {
   return (
     <>
       <Header />
+      <Navigation />
       <BookList books={books}/>
       <Footer />
     </>

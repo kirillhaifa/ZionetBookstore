@@ -20,11 +20,11 @@ const LoginForm: React.FC = () => {
       .unwrap()
       .then((user) => {
         console.log('User fetched successfully:', user);
-        navigate('/home'); // Перенаправление на страницу Home
+        document.cookie = "authorized=true; path=/; max-age=86400";
+        navigate('/home');
       })
       .catch((error) => {
         console.error('Error fetching user:', error);
-        alert('Login failed! Please try again.');
       });
   };
 

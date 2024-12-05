@@ -28,7 +28,7 @@ const BookCard = ({ book }) => {
   
     if (!userId) {
       navigate('/login');
-      return; // Завершаем выполнение функции
+      return;
     }
   
     isFavorite

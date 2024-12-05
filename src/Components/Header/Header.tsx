@@ -19,10 +19,10 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    document.cookie = "authorized=; path=/; max-age=0";
     navigate('/');
   };
 
-  console.log(user.favorites);
 
   return (
     <header className={classes.header}>
@@ -43,10 +43,11 @@ const Header: React.FC = () => {
               <MdOutlineLogout />
               <p className={classes.logout__text}>Logout</p>
             </button>
-            <Link to="/favorites" className={classes.favorites}>
+            {/* mooved to nav */}
+            {/* <Link to="/favorites" className={classes.favorites}>
               <MdFavoriteBorder />
               <p className={classes.favorites__text}>Favorites</p>
-            </Link>
+            </Link> */}
           </div>
         ) : (
           location.pathname !== '/login' && (
