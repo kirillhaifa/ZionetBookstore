@@ -1,0 +1,28 @@
+.search_input {
+  width: clamp(200px, 30vw, 500px);
+  height: 30px;
+  margin-top: 10px;
+}
+
+.input {
+  height: 30px;
+}
+
+.input_root {
+  height: 30px;
+  padding: 0; /* Убираем отступы */
+}
+
+.input_field {
+  height: 30px; 
+  width: 100%;/* Высота текстового поля */
+  padding: 0 8px; /* Внутренний отступ */
+  font-size: 14px;
+  border: 1px solid rgba(129, 129, 129, 1.0);
+  border-radius: 3px; /* Размер шрифта для более компактного вида */
+}
+
+.input_field:focus, .input_field:hover {
+  border: 1px solid #1976d2;
+  outline:  1px solid #1976d2;
+}

@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.filter_container {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding-top: 15px;
+}
+
+@media (max-width: 700px) {
+  .filter_container {
+    flex-direction: column;
+    gap: 0px;
+  }
+
+}
+

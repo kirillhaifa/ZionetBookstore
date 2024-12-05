@@ -1,12 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoHomeOutline } from "react-icons/io5";
-let classes = require('./Navigation.module.scss')
 import { FaRegHeart } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-
+let classes = require('./Navigation.module.scss') 
 
 const NavigationBar = () => {
   const navigate = useNavigate();

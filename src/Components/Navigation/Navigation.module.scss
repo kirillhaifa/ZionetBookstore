@@ -1,11 +1,15 @@
 .navigation_bar {
-  width: 70%;
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: clamp(10px, 30vw, 500px);
   padding: clamp(5px, 1vh, 20px) 0;
   border-bottom: 1px solid black;
   margin: auto;
+  position: sticky;
+  top: 0px;
+  background-color: white;
+  
 }
 
 .nav_button {

@@ -15,9 +15,9 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async (_, { rejec
 const booksSlice = createSlice({
   name: 'books',
   initialState: {
-    books: [], 
+    books: [],
     loading: false,
-    error: null
+    error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -28,13 +28,19 @@ const booksSlice = createSlice({
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
         state.loading = false;
-        state.books = action.payload;
+
+        // Фильтрация уникальных книг по `title`
+        const uniqueBooks = action.payload.filter((book, index, self) =>
+          index === self.findIndex((b) => b.title === book.title)
+        );
+
+        state.books = uniqueBooks;
       })
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
-  }
+  },
 });
 
 export default booksSlice.reducer;

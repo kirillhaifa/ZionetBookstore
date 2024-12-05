@@ -51,6 +51,14 @@ select {
   border: none;
 }
 
+button:hover,
+input:hover,
+select:hover
+link:hover {
+  color: #1976d2;
+  fill: #1976d2;
+}
+
 ul,
 ol {
   list-style: none;
