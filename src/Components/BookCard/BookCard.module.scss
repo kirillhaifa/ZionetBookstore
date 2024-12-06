@@ -1,9 +1,14 @@
-.card {
+.animation_div {
   width: clamp(250px, 20%, 300px);
+}
+
+.card {
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
+
 }
 
 .content_container {
@@ -33,7 +38,7 @@
 }
 
 .favorites__icon_choosen {
-  fill: red
+  fill: red;
 }
 
 .highlight {

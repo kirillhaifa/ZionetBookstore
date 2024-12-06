@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { FaHeart } from 'react-icons/fa6';
 import { addFavorite, removeFavorite } from '../../store/slices/userSlice';
+import { motion } from 'framer-motion'; // Импортируем Framer Motion
 let styles = require('./BookCard.module.scss');
 
 const BookCard = ({ book }) => {
@@ -61,47 +62,53 @@ const BookCard = ({ book }) => {
   };
 
   return (
-    <Card
-      className={styles.card}
-      tabIndex={0}
-      onClick={handleCardClick}
-      onKeyPress={(e) => e.key === 'Enter' && handleCardClick()}
-      role="button"
+    <motion.div className={styles.animation_div}
+      initial={{ opacity: 0, y: 20 }} // Начальное состояние
+      animate={{ opacity: 1, y: 0 }} // Анимация появления
+      transition={{ duration: 0.3, delay: 0.2 }} // Длительность и задержка
     >
-      <div className={styles.content_container}>
-        <CardMedia
-          className={styles.media}
-          component="img"
-          image={book.coverImage}
-          alt={book.title}
-        />
-        <CardContent className={styles.content}>
-          <Typography gutterBottom variant="h5" component="div">
-            {highlightText(book.title)}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Author: {highlightText(book.author)}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Genre: {book.genre}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Rating: {book.rating}
-          </Typography>
-        </CardContent>
-      </div>
-      <button
-        className={styles.favorites__button}
-        onClick={handleFavoriteClick}
+      <Card
+        className={styles.card}
+        tabIndex={0}
+        onClick={handleCardClick}
+        onKeyPress={(e) => e.key === 'Enter' && handleCardClick()}
+        role="button"
       >
-        {isFavorite ? <p>Remove from favorites</p> : <p>Add to favorites</p>}
-        {isFavorite ? (
-          <FaHeart className={styles.favorites__icon_choosen} />
-        ) : (
-          <MdFavoriteBorder />
-        )}
-      </button>
-    </Card>
+        <div className={styles.content_container}>
+          <CardMedia
+            className={styles.media}
+            component="img"
+            image={book.coverImage}
+            alt={book.title}
+          />
+          <CardContent className={styles.content}>
+            <Typography gutterBottom variant="h5" component="div">
+              {highlightText(book.title)}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Author: {highlightText(book.author)}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Genre: {book.genre}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Rating: {book.rating}
+            </Typography>
+          </CardContent>
+        </div>
+        <button
+          className={styles.favorites__button}
+          onClick={handleFavoriteClick}
+        >
+          {isFavorite ? <p>Remove from favorites</p> : <p>Add to favorites</p>}
+          {isFavorite ? (
+            <FaHeart className={styles.favorites__icon_choosen} />
+          ) : (
+            <MdFavoriteBorder />
+          )}
+        </button>
+      </Card>
+    </motion.div>
   );
 };
 
