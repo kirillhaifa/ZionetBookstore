@@ -25,22 +25,19 @@ const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   // Селекторы для книг
-  const booksLoading = useSelector((state: RootState) => state.books.loading);
   const booksError = useSelector((state: RootState) => state.books.error);
 
   // Селекторы для пользователя
-  // временно!!!!!
-  const user = useSelector((state: RootState) => state.user);
-  const userLoading = useSelector((state: RootState) => state.user.loading);
   const userError = useSelector((state: RootState) => state.user.error);
 
   useEffect(() => {
     dispatch(fetchBooks());
 
-    const isAuthorized = document.cookie.includes("authorized=true");
+    const isAuthorized = document.cookie.includes('authorized=true');
     if (isAuthorized) {
       dispatch(fetchUser());
     }
+    
   }, [dispatch]);
 
   if (booksError || userError) {
@@ -52,24 +49,15 @@ const App: React.FC = () => {
     );
   }
 
-
   return (
     <Router>
-      <div>
-        {booksLoading ? (
-          <CircularProgress />
-        ) : (
-          <div>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/favorites" element={<Favorities />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="*" element={<Navigate to="/" />} />
-              <Route path="/books/:id" element={<BookDetailsPage />} />
-            </Routes>
-          </div>
-        )}
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/favorites" element={<Favorities />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/books/:id" element={<BookDetailsPage />} />
+      </Routes>
     </Router>
   );
 };
