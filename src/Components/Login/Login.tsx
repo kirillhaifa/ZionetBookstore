@@ -21,7 +21,7 @@ const LoginForm: React.FC = () => {
       .then((user) => {
         console.log('User fetched successfully:', user);
         document.cookie = "authorized=true; path=/; max-age=86400";
-        navigate('/home');
+        navigate('/');
       })
       .catch((error) => {
         console.error('Error fetching user:', error);

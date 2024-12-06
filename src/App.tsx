@@ -15,6 +15,7 @@ import FavoritiesBooks from './Components/FavoritiesBooks/FavoritiesBooks';
 import BooklistWithFilters from './Components/BooklistWithFilters/BooklistWithFilters';
 import LoginForm from './Components/Login/Login';
 import NotFound from './Components/NotFound/NotFound';
+import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,17 +41,18 @@ const App: React.FC = () => {
       </Layout>
     );
   }
-  
 
   return (
     <Router>
       <Layout>
         <Routes>
           <Route path="/" element={<BooklistWithFilters />} />
-          <Route path="/favorites" element={<FavoritiesBooks />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/books/:id" element={<BookDetails />} />
           <Route path="*" element={<NotFound />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/favorites" element={<FavoritiesBooks />} />
+          </Route>
         </Routes>
       </Layout>
     </Router>

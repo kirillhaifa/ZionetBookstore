@@ -11,20 +11,6 @@ const FavoritiesBooks = () => {
   const books = useSelector((state: RootState) => state.books.books); // Все книги
   const user = useSelector((state: RootState) => state.user); // Данные пользователя
 
-  // Проверка: если пользователь не авторизован
-  if (!user.id) {
-    return (
-      <div className={classes.container}>
-        <Header />
-        <div className={classes.no_user_container}>
-          <h2>Please log in to manage your favorites</h2>
-          <Link to="/login">Login</Link>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   // Фильтруем избранные книги
   const favoritiesBooks = books.filter((book) =>
     user.favorites.includes(book.id),
