@@ -28,13 +28,7 @@ const booksSlice = createSlice({
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
         state.loading = false;
-
-        // Фильтрация уникальных книг по `title`
-        const uniqueBooks = action.payload.filter((book, index, self) =>
-          index === self.findIndex((b) => b.title === book.title)
-        );
-
-        state.books = uniqueBooks;
+        state.books = action.payload;
       })
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;

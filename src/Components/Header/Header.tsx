@@ -5,7 +5,6 @@ import { RootState } from '../../store';
 import { logoutUser } from '../../store/slices/userSlice';
 import { GoBook } from 'react-icons/go';
 import { FaRegUser } from 'react-icons/fa6';
-import { MdFavoriteBorder } from 'react-icons/md';
 import { MdOutlineLogout } from 'react-icons/md';
 import { MdOutlineLogin } from 'react-icons/md';
 
@@ -43,11 +42,6 @@ const Header: React.FC = () => {
               <MdOutlineLogout />
               <p className={classes.logout__text}>Logout</p>
             </button>
-            {/* mooved to nav */}
-            {/* <Link to="/favorites" className={classes.favorites}>
-              <MdFavoriteBorder />
-              <p className={classes.favorites__text}>Favorites</p>
-            </Link> */}
           </div>
         ) : (
           location.pathname !== '/login' && (

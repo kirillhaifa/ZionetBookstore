@@ -1,12 +1,14 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin'); // Для копирования статических файлов
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
+    publicPath: '/', // Указывает корневой путь для статических файлов
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -45,6 +47,14 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+      {
+        // Для обработки изображений и иконок
+        test: /\.(ico|png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'img/[name][ext]', // Копирует файлы в папку dist/img
+        },
+      },
     ],
   },
   plugins: [
@@ -52,6 +62,11 @@ module.exports = {
       template: './public/index.html',
     }),
     new Dotenv(),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public/img', to: 'img' }, // Копируем файлы из public/img в dist/img
+      ],
+    }),
   ],
   devServer: {
     static: './dist',
