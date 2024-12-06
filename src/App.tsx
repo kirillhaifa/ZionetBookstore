@@ -19,12 +19,10 @@ import ProtectedRoute from './Components/ProtectedRoute/ProtectedRoute';
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-
   const booksError = useSelector((state: RootState) => state.books.error);
   const userError = useSelector((state: RootState) => state.user.error);
 
   useEffect(() => {
-    dispatch(fetchBooks());
     const isAuthorized = document.cookie.includes('authorized=true');
     if (isAuthorized) {
       dispatch(fetchUser());

@@ -30,14 +30,7 @@ const initialState: BooksState = {
 const booksSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {
-    setVisibleBooks: (state, action) => {
-      state.visibleBooks = action.payload;
-    },
-    resetVisibleBooks: (state) => {
-      state.visibleBooks = [];
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchBooks.pending, (state) => {
@@ -55,5 +48,4 @@ const booksSlice = createSlice({
   },
 });
 
-export const { setVisibleBooks, resetVisibleBooks } = booksSlice.actions;
 export default booksSlice.reducer;
