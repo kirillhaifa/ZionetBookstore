@@ -37,6 +37,8 @@ src/
 package.json            # Project dependencies and scripts
 tsconfig.json           # TypeScript configuration
 webpack.config.js       # Webpack bundler configuration
+```
+
 
 ---
 
