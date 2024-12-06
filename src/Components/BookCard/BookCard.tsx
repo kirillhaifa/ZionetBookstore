@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MdFavoriteBorder } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
@@ -13,12 +13,17 @@ let styles = require('./BookCard.module.scss');
 
 const BookCard = ({ book }) => {
   const navigate = useNavigate();
+  const location = useLocation(); // Получаем текущий путь
   const dispatch = useDispatch();
   const favorites = useSelector((state: RootState) => state.user.favorites);
   const userId = useSelector((state: RootState) => state.user.id);
-  const query = useSelector((state: RootState) => state.filter.query.toLowerCase()); // Получаем запрос для поиска
+  const query = useSelector((state: RootState) =>
+    state.filter.query.toLowerCase(),
+  ); // Получаем запрос для поиска
 
   const isFavorite = favorites.includes(book.id);
+  // Проверяем, находимся ли мы на странице избранного
+  const isFavoritesPage = location.pathname === '/favorites';
 
   const handleCardClick = () => {
     navigate(`/books/${book.id}`);
@@ -39,7 +44,7 @@ const BookCard = ({ book }) => {
 
   // Функция для выделения совпадений
   const highlightText = (text: string) => {
-    if (!query) return text;
+    if (isFavoritesPage || !query) return text;
 
     const regex = new RegExp(`(${query})`, 'gi');
     const parts = text.split(regex);
@@ -51,7 +56,7 @@ const BookCard = ({ book }) => {
         </span>
       ) : (
         part
-      )
+      ),
     );
   };
 

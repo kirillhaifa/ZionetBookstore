@@ -20,6 +20,13 @@ const BooklistWithFilters = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const [page, setPage] = useState(1);
 
+  // Загружаем книги только при первой загрузке, если их нет
+  useEffect(() => {
+    if (books.length === 0) {
+      dispatch(fetchBooks());
+    }
+  }, [dispatch, books.length]);
+
   // Мемоизируем фильтрацию книг
   const filteredBooks = useMemo(() => {
     return books.filter((book: Book) => {
@@ -32,12 +39,16 @@ const BooklistWithFilters = () => {
     });
   }, [books, query, genre]);
 
-  // Обновляем видимые книги
+  // Обновляем видимые книги только при изменении `page` или `filteredBooks`
   useEffect(() => {
     const startIndex = (page - 1) * 10;
     const endIndex = page * 10;
-    dispatch(setVisibleBooks(filteredBooks.slice(0, endIndex)));
-  }, [filteredBooks, page, dispatch]);
+    const newVisibleBooks = filteredBooks.slice(0, endIndex);
+
+    if (JSON.stringify(newVisibleBooks) !== JSON.stringify(visibleBooks)) {
+      dispatch(setVisibleBooks(newVisibleBooks));
+    }
+  }, [filteredBooks, page]);
 
   // Сбрасываем страницу и очищаем видимые книги при изменении фильтров
   useEffect(() => {
@@ -62,7 +73,7 @@ const BooklistWithFilters = () => {
     observer.observe(sentinelRef.current);
 
     return () => observer.disconnect();
-  }, [dispatch, page, books.length]);
+  }, [books.length]);
 
   return (
     <div className={classes.container}>
