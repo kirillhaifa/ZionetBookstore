@@ -38,10 +38,13 @@ package.json            # Project dependencies and scripts
 tsconfig.json           # TypeScript configuration
 webpack.config.js       # Webpack bundler configuration
 
+---
 
 ## Scripts
 - npm start - Starts the development server.
 -  npm run build - Builds the project for production.
+
+---
 
 ## Technologies Used
 - React: Library for building user interfaces.
@@ -50,6 +53,8 @@ webpack.config.js       # Webpack bundler configuration
 - SCSS: CSS preprocessor for modular styles.
 - Material-UI: UI component library.
 - Webpack: Module bundler.
+
+---
 
 ## How It Works
 - **Filtering**
