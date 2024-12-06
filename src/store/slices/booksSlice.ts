@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { Book } from '../../types';
 
 export const fetchBooks = createAsyncThunk('books/fetchBooks', async (_, { rejectWithValue }) => {
   try {
@@ -12,14 +13,31 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async (_, { rejec
   }
 });
 
+interface BooksState {
+  books: Book[];
+  visibleBooks: Book[];
+  loading: boolean;
+  error: string | null;
+}
+
+const initialState: BooksState = {
+  books: [],
+  visibleBooks: [],
+  loading: false,
+  error: null,
+};
+
 const booksSlice = createSlice({
   name: 'books',
-  initialState: {
-    books: [],
-    loading: false,
-    error: null,
+  initialState,
+  reducers: {
+    setVisibleBooks: (state, action) => {
+      state.visibleBooks = action.payload;
+    },
+    resetVisibleBooks: (state) => {
+      state.visibleBooks = [];
+    },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchBooks.pending, (state) => {
@@ -28,13 +46,14 @@ const booksSlice = createSlice({
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
         state.loading = false;
-        state.books = action.payload;
+        state.books = [...state.books, ...action.payload];
       })
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       });
   },
 });
 
+export const { setVisibleBooks, resetVisibleBooks } = booksSlice.actions;
 export default booksSlice.reducer;

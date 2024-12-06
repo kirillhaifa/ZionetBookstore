@@ -1,13 +1,16 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin'); // Для копирования статических файлов
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin'); // Минификация JS
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); // Минификация CSS
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin'); // Сжатие изображений
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name].[contenthash].js', // Хеширование для предотвращения кеширования
     publicPath: '/', // Указывает корневой путь для статических файлов
   },
   resolve: {
@@ -57,6 +60,16 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    minimize: true, // Минификация
+    minimizer: [
+      new TerserPlugin(), // Минификация JavaScript
+      new CssMinimizerPlugin(), // Минификация CSS
+    ],
+    splitChunks: {
+      chunks: 'all', // Code splitting
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
@@ -67,6 +80,17 @@ module.exports = {
         { from: 'public/img', to: 'img' }, // Копируем файлы из public/img в dist/img
       ],
     }),
+    new ImageMinimizerPlugin({
+      minimizer: {
+        implementation: ImageMinimizerPlugin.imageminMinify,
+        options: {
+          plugins: [
+            ['imagemin-mozjpeg', { quality: 75 }],
+            ['imagemin-pngquant', { quality: [0.6, 0.8] }],
+          ],
+        },
+      },
+    }),
   ],
   devServer: {
     static: './dist',
@@ -74,5 +98,9 @@ module.exports = {
     watchFiles: ['src/**/*.scss', 'src/**/*.css'],
     port: 3000,
     historyApiFallback: true,
+  },
+  performance: {
+    maxAssetSize: 512000, // Увеличение порога для предупреждений о размере ассетов
+    maxEntrypointSize: 512000, // Увеличение порога для предупреждений о точках входа
   },
 };
