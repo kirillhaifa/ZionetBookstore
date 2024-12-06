@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Минимальная высота на весь экран */
+}
+
+.container_upper {
+  flex: 1; /* Заставляет этот блок занимать всё доступное пространство между хедером и футером */
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.content {
+  flex-grow: 1;
+}

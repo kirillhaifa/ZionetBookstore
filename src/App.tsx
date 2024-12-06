@@ -7,37 +7,33 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { RootState, AppDispatch } from './store';
-import CircularProgress from '@mui/material/CircularProgress';
 import { fetchBooks } from './store/slices/booksSlice';
 import { fetchUser } from './store/slices/userSlice';
-import BooksList from './Components/BookList/BookList';
-import Header from './Components/Header/Header';
-import Home from './pages/Home/Home';
-import Login from './pages/Login/Login';
-import BookDetailsPage from './pages/BookDetails/BookDetails';
-import Favorities from './pages/Favorities/Favorities';
-
-// import Favorites from './Components/Favorites/Favorites';
-// import Login from './Components/Login/Login';
-// import Home from './Components/Home/Home';
+import CircularProgress from '@mui/material/CircularProgress';
+// import Home from './pages/Home/Home';
+// import Login from './pages/Login/Login';
+// import Favorities from './pages/Favorities/Favorities';
+import Layout from './Components/Layout/Layout';
+import BookList from './Components/BookList/BookList';
+import BookDetails from './Components/BookDetails/BookDetails';
+import FavoritiesBooks from './Components/FavoritiesBooks/FavoritiesBooks';
+import BooklistWithFilters from './Components/BooklistWithFilters/BooklistWithFilters';
+import LoginForm from './Components/Login/Login';
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const books = useSelector((state: RootState) => state.books.books); // Все книги
 
-  // Селекторы для книг
   const booksError = useSelector((state: RootState) => state.books.error);
-
-  // Селекторы для пользователя
   const userError = useSelector((state: RootState) => state.user.error);
+  const user = useSelector((state: RootState) => state.user); // Данные пользователя
 
   useEffect(() => {
     dispatch(fetchBooks());
-
     const isAuthorized = document.cookie.includes('authorized=true');
     if (isAuthorized) {
       dispatch(fetchUser());
     }
-    
   }, [dispatch]);
 
   if (booksError || userError) {
@@ -51,13 +47,15 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/favorites" element={<Favorities />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/books/:id" element={<BookDetailsPage />} />
-      </Routes>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<BooklistWithFilters />} />
+          <Route path="/favorites" element={<FavoritiesBooks />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/books/:id" element={<BookDetails />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 };
