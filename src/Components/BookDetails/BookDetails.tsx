@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import '../../assets/Fonts/fonts.scss'; // Подключение шрифтов
 import AddToFavoritiesButton from '../FavorotiesButton/FavoritiesButton';
+import NotFound from '../NotFound/NotFound';
 let classes = require('./BookDetails.module.scss'); // Подключение модульных стилей
 
 const BookDetails: React.FC = () => {
@@ -13,7 +14,7 @@ const BookDetails: React.FC = () => {
   ); // Ищем книгу в списке книг из Redux Store
 
   if (!book) {
-    return <p className={classes.notFound}>Book not found</p>;
+    return <NotFound />;
   }
 
   return (
