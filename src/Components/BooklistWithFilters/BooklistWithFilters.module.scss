@@ -29,3 +29,23 @@
   width: 50px;
   margin: auto;
 }
+
+.no_more_books_container {
+  width: 100%;
+  margin: auto;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.no_more_books {
+  margin: auto;
+  text-align: center;
+}
+
+.no_more_books_icon {
+  height: 30px;
+  width: 30px;
+}

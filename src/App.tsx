@@ -7,7 +7,6 @@ import {
   Navigate,
 } from 'react-router-dom';
 import { RootState, AppDispatch } from './store';
-import { fetchBooks } from './store/slices/booksSlice';
 import { fetchUser } from './store/slices/userSlice';
 import Layout from './Components/Layout/Layout';
 import BookDetails from './Components/BookDetails/BookDetails';
