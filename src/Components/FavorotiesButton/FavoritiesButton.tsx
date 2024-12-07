@@ -1,39 +1,44 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFavorite, removeFavorite } from '../../store/slices/userSlice';
-import { RootState } from '../../store';
-let classes = require('./FavoritiesButton.module.scss')
+import { RootState, AppDispatch } from '../../store';
+import { updateFavorites } from '../../store/slices/userSlice'; // Асинхронный thunk
+let classes = require('./FavoritiesButton.module.scss');
 
 interface Props {
   id: string; // Проп id книги
 }
 
 const FavoritesButton: React.FC<Props> = ({ id }) => {
-  const dispatch = useDispatch();
-  const favorites = useSelector((state: RootState) => state.user.favorites); // Избранные книги из Redux
+  const dispatch = useDispatch<AppDispatch>();
+  const favorites = useSelector((state: RootState) => state.user.favorites); // Избранное
+  const userId = useSelector((state: RootState) => state.user.id); // ID пользователя
+  const loading = useSelector((state: RootState) => state.user.loading); // Индикатор загрузки
 
-  // Проверяем, есть ли книга в избранных
   const isFavorite = favorites.includes(id);
 
-  // Обработчик клика
-  const handleClick = () => {
-    if (isFavorite) {
-      dispatch(removeFavorite(id)); // Удаляем из избранных
-    } else {
-      dispatch(addFavorite(id)); // Добавляем в избранное
+  const handleClick = async () => {
+    const updatedFavorites = isFavorite
+      ? favorites.filter((bookId) => bookId !== id)
+      : [...favorites, id];
+
+    try {
+      await dispatch(updateFavorites({ userId: userId!, favorites: updatedFavorites })).unwrap();
+    } catch (error) {
+      console.error('Failed to update favorites on the server:', error);
     }
   };
 
   return (
     <div>
       <Button
-        variant={'contained'} // Разный стиль для добавления/удаления
-        color={'primary'} // Разный цвет
+        variant="contained"
+        color={'primary'} // Цвет кнопки зависит от состояния
         onClick={handleClick}
-        className={classes.container} // Логика кнопки
+        disabled={loading} // Блокируем кнопку во время загрузки
+        className={classes.container}
       >
-        {isFavorite ? 'Remove from Favorites' : 'Add to Favorites'} {/* Текст кнопки */}
+        {loading ? 'Updating...' : isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
       </Button>
     </div>
   );

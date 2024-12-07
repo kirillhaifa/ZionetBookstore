@@ -14,6 +14,31 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async (_, { rejectWi
   }
 });
 
+// Асинхронный санк для обновления избранного
+export const updateFavorites = createAsyncThunk(
+  'user/updateFavorites',
+  async ({ userId, favorites }: { userId: string; favorites: string[] }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`https://674f2c63bb559617b26e568b.mockapi.io/user/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ Favorites: favorites }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to update favorites: ${response.statusText}`);
+      }
+
+      const updatedUser = await response.json();
+      return updatedUser.Favorites; // Возвращаем обновлённый массив избранных
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -31,14 +56,14 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    addFavorite: (state, action) => {
+    addFavoriteLocal: (state, action) => {
       const bookId = action.payload;
       if (!state.favorites.includes(bookId)) {
-        state.favorites.push(bookId); // Добавляем ID книги, если его еще нет в массиве
+        state.favorites.push(bookId); // Добавляем ID книги локально
       }
     },
-    removeFavorite: (state, action) => {
-      state.favorites = state.favorites.filter((bookId) => bookId !== action.payload); // Удаляем книгу из массива
+    removeFavoriteLocal: (state, action) => {
+      state.favorites = state.favorites.filter((bookId) => bookId !== action.payload); // Удаляем книгу локально
     },
   },
   extraReducers: (builder) => {
@@ -56,11 +81,23 @@ const userSlice = createSlice({
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload; // Сохраняем сообщение об ошибке
+      })
+      .addCase(updateFavorites.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateFavorites.fulfilled, (state, action) => {
+        state.loading = false;
+        state.favorites = action.payload; // Обновляем локальное избранное
+      })
+      .addCase(updateFavorites.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload; // Сохраняем сообщение об ошибке
       });
   },
 });
 
 // Экспортируем действия для использования
-export const { logoutUser, addFavorite, removeFavorite } = userSlice.actions;
+export const { logoutUser, addFavoriteLocal, removeFavoriteLocal } = userSlice.actions;
 
 export default userSlice.reducer;

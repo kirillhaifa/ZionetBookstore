@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -6,44 +6,56 @@ import Typography from '@mui/material/Typography';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdFavoriteBorder } from 'react-icons/md';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store';
+import { RootState, AppDispatch } from '../../store';
 import { FaHeart } from 'react-icons/fa6';
-import { addFavorite, removeFavorite } from '../../store/slices/userSlice';
-import { motion } from 'framer-motion'; // Импортируем Framer Motion
-let styles = require('./BookCard.module.scss');
+import { motion } from 'framer-motion';
+import { updateFavorites } from '../../store/slices/userSlice';
+import { CircularProgress } from '@mui/material';
+let styles = require('./BookCard.module.scss')
 
 const BookCard = ({ book }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // Получаем текущий путь
-  const dispatch = useDispatch();
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+
   const favorites = useSelector((state: RootState) => state.user.favorites);
   const userId = useSelector((state: RootState) => state.user.id);
-  const query = useSelector((state: RootState) =>
-    state.filter.query.toLowerCase(),
-  ); // Получаем запрос для поиска
+  const query = useSelector((state: RootState) => state.filter.query.toLowerCase());
+
+  const [localLoading, setLocalLoading] = useState(false); // Локальное состояние загрузки
 
   const isFavorite = favorites.includes(book.id);
-  // Проверяем, находимся ли мы на странице избранного
   const isFavoritesPage = location.pathname === '/favorites';
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     navigate(`/books/${book.id}`);
-  };
+  }, [navigate, book.id]);
 
-  const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
+  const handleFavoriteClick = useCallback(
+    async (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
 
-    if (!userId) {
-      navigate('/login');
-      return;
-    }
+      if (!userId) {
+        navigate('/login');
+        return;
+      }
 
-    isFavorite
-      ? dispatch(removeFavorite(book.id))
-      : dispatch(addFavorite(book.id));
-  };
+      const updatedFavorites = isFavorite
+        ? favorites.filter((favId) => favId !== book.id)
+        : [...favorites, book.id];
 
-  // Функция для выделения совпадений
+      setLocalLoading(true); // Включаем локальный индикатор загрузки
+      try {
+        await dispatch(updateFavorites({ userId, favorites: updatedFavorites })).unwrap();
+      } catch (error) {
+        console.error('Failed to update favorites:', error);
+      } finally {
+        setLocalLoading(false); // Выключаем индикатор загрузки
+      }
+    },
+    [dispatch, userId, isFavorite, favorites, book.id, navigate]
+  );
+
   const highlightText = (text: string) => {
     if (isFavoritesPage || !query) return text;
 
@@ -57,15 +69,16 @@ const BookCard = ({ book }) => {
         </span>
       ) : (
         part
-      ),
+      )
     );
   };
 
   return (
-    <motion.div className={styles.animation_div}
-      initial={{ opacity: 0, y: 20 }} // Начальное состояние
-      animate={{ opacity: 1, y: 0 }} // Анимация появления
-      transition={{ duration: 0.3, delay: 0.2 }} // Длительность и задержка
+    <motion.div
+      className={styles.animation_div}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
     >
       <Card
         className={styles.card}
@@ -99,12 +112,20 @@ const BookCard = ({ book }) => {
         <button
           className={styles.favorites__button}
           onClick={handleFavoriteClick}
+          disabled={localLoading} // Используем локальное состояние
         >
-          {isFavorite ? <p>Remove from favorites</p> : <p>Add to favorites</p>}
-          {isFavorite ? (
-            <FaHeart className={styles.favorites__icon_choosen} />
+          {localLoading ? (
+            <CircularProgress size={20} className={styles.loading_spinner} />
+          ) : isFavorite ? (
+            <>
+              <p>Remove from favorites</p>
+              <FaHeart className={styles.favorites__icon_choosen} />
+            </>
           ) : (
-            <MdFavoriteBorder />
+            <>
+              <p>Add to favorites</p>
+              <MdFavoriteBorder />
+            </>
           )}
         </button>
       </Card>
