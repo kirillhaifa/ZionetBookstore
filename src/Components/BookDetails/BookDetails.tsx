@@ -1,18 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import '../../assets/Fonts/fonts.scss'; // Подключение шрифтов
 import AddToFavoritiesButton from '../FavorotiesButton/FavoritiesButton';
 import NotFound from '../NotFound/NotFound';
+import { fetchBookById } from '../../utils/api'; // Функция для фетчинга книги
+import { CircularProgress } from '@mui/material';
 let classes = require('./BookDetails.module.scss'); // Подключение модульных стилей
 
 const BookDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Получаем ID книги из URL
-  const book = useSelector((state: RootState) =>
-    state.books.books.find((book) => book.id === id)
-  ); // Ищем книгу в списке книг из Redux Store
 
+  const [book, setBook] = useState(null); // Локальное состояние для книги
+  const [loading, setLoading] = useState(true); // Состояние загрузки
+  const [error, setError] = useState<string | null>(null); // Состояние ошибки
+
+  // Фетчим книгу при монтировании компонента или изменении ID
+  useEffect(() => {
+    if (!id) {
+      setError('Book ID is missing');
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    fetchBookById(id)
+      .then((fetchedBook) => {
+        setBook(fetchedBook);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch book:', err);
+        setError('Failed to load book details.');
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  // Показываем сообщение об ошибке, если не удалось загрузить
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  // Показываем спиннер при загрузке
+  if (loading) {
+    return           <div className={classes.spiner}>
+    <CircularProgress />
+  </div>;
+  }
+
+  // Показываем компонент NotFound, если книга не найдена
   if (!book) {
     return <NotFound />;
   }
@@ -31,7 +65,7 @@ const BookDetails: React.FC = () => {
         </p>
         <p className={classes.rating}>Rating: {book.rating}/5</p>
       </div>
-      <AddToFavoritiesButton id={book.id}/>
+      <AddToFavoritiesButton id={book.id} />
     </div>
   );
 };

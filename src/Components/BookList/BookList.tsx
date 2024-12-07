@@ -1,5 +1,4 @@
 import React from 'react';
-import { CircularProgress } from '@mui/material';
 import BookCard from '../BookCard/BookCard';
 import { Grid2 } from '@mui/material';
 import { Book } from '../../types';

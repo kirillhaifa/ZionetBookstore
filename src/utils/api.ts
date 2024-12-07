@@ -46,3 +46,16 @@ export const updateFavorites = async (
   }
 };
 
+export const fetchBookById = async (id: string) => {
+  try {
+    const response = await fetch(`https://674f2c63bb559617b26e568b.mockapi.io/books/${id}`); // Используем id для запроса конкретной книги
+    if (!response.ok) {
+      throw new Error(`Failed to fetch book with ID ${id}. Status: ${response.status}`);
+    }
+    const book = await response.json();
+    return book; // Возвращаем данные книги
+  } catch (error) {
+    console.error(`Error fetching book with ID ${id}:`, error);
+    throw error; // Пробрасываем ошибку дальше
+  }
+};
