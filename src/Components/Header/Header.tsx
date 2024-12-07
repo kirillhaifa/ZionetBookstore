@@ -32,12 +32,12 @@ const Header: React.FC = () => {
       <div className={classes.actions}>
         {user.id ? (
           <div className={classes.user}>
-            <div className={classes.profile}>
-              <button className={classes.icon}>
+            <button className={classes.profile}>
+              <div className={classes.icon}>
                 <FaRegUser className={classes.avatar} />
-              </button>
+              </div>
               <span className={classes.username}>{user.name}</span>
-            </div>
+            </ button>
             <button className={classes.logout} onClick={handleLogout}>
               <MdOutlineLogout />
               <p className={classes.logout__text}>Logout</p>

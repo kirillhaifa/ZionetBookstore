@@ -34,7 +34,7 @@ const BookCard = ({ book }) => {
   }, [navigate, book.id]);
 
   const handleFavoriteClick = useCallback(
-    async (event: React.MouseEvent<HTMLButtonElement>) => {
+    async (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => {
       event.stopPropagation();
 
       if (!userId) {
@@ -92,7 +92,6 @@ const BookCard = ({ book }) => {
         className={styles.card}
         tabIndex={0}
         onClick={handleCardClick}
-        onKeyPress={(e) => e.key === 'Enter' && handleCardClick()}
         role="button"
         data-testid={`book-card-${book.id}`} // data-testid для карточки
       >
@@ -136,6 +135,7 @@ const BookCard = ({ book }) => {
           onClick={handleFavoriteClick}
           disabled={localLoading}
           data-testid={`favorite-button-${book.id}`} // data-testid для кнопки добавления в избранное
+          onKeyPress={(e) => e.key === 'Enter' && handleFavoriteClick(e)} // Обработчик на кнопке
         >
           {localLoading ? (
             <CircularProgress size={20} className={styles.loading_spinner} />
@@ -157,3 +157,4 @@ const BookCard = ({ book }) => {
 };
 
 export default BookCard;
+
