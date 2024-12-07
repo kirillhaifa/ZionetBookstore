@@ -11,7 +11,7 @@ import { FaHeart } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
 import { updateFavorites } from '../../store/slices/userSlice';
 import { CircularProgress } from '@mui/material';
-let styles = require('./BookCard.module.scss')
+let styles = require('./BookCard.module.scss');
 
 const BookCard = ({ book }) => {
   const navigate = useNavigate();
@@ -20,7 +20,9 @@ const BookCard = ({ book }) => {
 
   const favorites = useSelector((state: RootState) => state.user.favorites);
   const userId = useSelector((state: RootState) => state.user.id);
-  const query = useSelector((state: RootState) => state.filter.query.toLowerCase());
+  const query = useSelector((state: RootState) =>
+    state.filter.query.toLowerCase(),
+  );
 
   const [localLoading, setLocalLoading] = useState(false); // Локальное состояние загрузки
 
@@ -46,14 +48,16 @@ const BookCard = ({ book }) => {
 
       setLocalLoading(true); // Включаем локальный индикатор загрузки
       try {
-        await dispatch(updateFavorites({ userId, favorites: updatedFavorites })).unwrap();
+        await dispatch(
+          updateFavorites({ userId, favorites: updatedFavorites }),
+        ).unwrap();
       } catch (error) {
         console.error('Failed to update favorites:', error);
       } finally {
         setLocalLoading(false); // Выключаем индикатор загрузки
       }
     },
-    [dispatch, userId, isFavorite, favorites, book.id, navigate]
+    [dispatch, userId, isFavorite, favorites, book.id, navigate],
   );
 
   const highlightText = (text: string) => {
@@ -64,12 +68,16 @@ const BookCard = ({ book }) => {
 
     return parts.map((part, index) =>
       regex.test(part) ? (
-        <span key={index} className={styles.highlight}>
+        <span
+          key={index}
+          className={styles.highlight}
+          data-testid={'query_span'} // data-testid для названия
+        >
           {part}
         </span>
       ) : (
         part
-      )
+      ),
     );
   };
 
@@ -86,6 +94,7 @@ const BookCard = ({ book }) => {
         onClick={handleCardClick}
         onKeyPress={(e) => e.key === 'Enter' && handleCardClick()}
         role="button"
+        data-testid={`book-card-${book.id}`} // data-testid для карточки
       >
         <div className={styles.content_container}>
           <CardMedia
@@ -93,12 +102,25 @@ const BookCard = ({ book }) => {
             component="img"
             image={book.coverImage}
             alt={book.title}
+            data-testid={`book-image-${book.id}`} // data-testid для изображения
           />
-          <CardContent className={styles.content}>
-            <Typography gutterBottom variant="h5" component="div">
+          <CardContent
+            className={styles.content}
+            data-testid={`card-content-${book.id}`}
+          >
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              data-testid={`card-title-${book.id}`} // data-testid для названия
+            >
               {highlightText(book.title)}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              data-testid={`book-author-${book.id}`}
+            >
               Author: {highlightText(book.author)}
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -112,7 +134,8 @@ const BookCard = ({ book }) => {
         <button
           className={styles.favorites__button}
           onClick={handleFavoriteClick}
-          disabled={localLoading} // Используем локальное состояние
+          disabled={localLoading}
+          data-testid={`favorite-button-${book.id}`} // data-testid для кнопки добавления в избранное
         >
           {localLoading ? (
             <CircularProgress size={20} className={styles.loading_spinner} />

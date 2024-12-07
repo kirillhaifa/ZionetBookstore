@@ -14,7 +14,7 @@ const SearchInput: React.FC = () => {
   };
 
   return (
-    <div className={classes.search_input}>
+    <div className={classes.search_input} data-testid="search-input-container">
       <FormControl fullWidth>
         <input
           type="text"
@@ -22,6 +22,7 @@ const SearchInput: React.FC = () => {
           onChange={handleInputChange} // Обработчик изменения
           placeholder="Enter author or book name"
           className={classes.input_field} // Стили из SCSS
+          data-testid="search-input" // Добавляем data-testid для поля ввода
         />
       </FormControl>
     </div>
