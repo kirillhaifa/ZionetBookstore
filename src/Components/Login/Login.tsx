@@ -19,7 +19,6 @@ const LoginForm: React.FC = () => {
     dispatch(fetchUser())
       .unwrap()
       .then((user) => {
-        console.log('User fetched successfully:', user);
         document.cookie = "authorized=true; path=/; max-age=86400";
         navigate('/');
       })

@@ -1,22 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Book } from '../../types';
 
-// export const fetchBooks = createAsyncThunk(
-//   'books/fetchBooks',
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await fetch(
-//         'https://674f2c63bb559617b26e568b.mockapi.io/books',
-//       );
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch books');
-//       }
-//       return await response.json();
-//     } catch (error) {
-//       return rejectWithValue(error.message);
-//     }
-//   },
-// );
+export const fetchBooks = createAsyncThunk(
+  'books/fetchBooks',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch(
+        'https://674f2c63bb559617b26e568b.mockapi.io/books',
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch books');
+      }
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
 
 export const fetchBooksInRange = createAsyncThunk(
   'books/fetchBooksInRange',
@@ -99,7 +99,8 @@ const booksSlice = createSlice({
 
         // Добавляем уникальные книги
         const newBooks = action.payload.filter(
-          (book) => !state.books.some((existingBook) => existingBook.id === book.id),
+          (book) =>
+            !state.books.some((existingBook) => existingBook.id === book.id),
         );
         state.books = [...state.books, ...newBooks];
 
@@ -109,6 +110,19 @@ const booksSlice = createSlice({
         }
       })
       .addCase(fetchBooksInRange.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchBooks.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchBooks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.books = action.payload; // Сохраняем все книги
+        state.allBooksLoaded = true; // Помечаем, что все книги загружены
+      })
+      .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

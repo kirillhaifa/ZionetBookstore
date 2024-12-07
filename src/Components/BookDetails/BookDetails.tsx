@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store';
+import { fetchUser } from '../../store/slices/userSlice';
 import '../../assets/Fonts/fonts.scss'; // Подключение шрифтов
 import AddToFavoritiesButton from '../FavorotiesButton/FavoritiesButton';
 import NotFound from '../NotFound/NotFound';
@@ -9,10 +12,24 @@ let classes = require('./BookDetails.module.scss'); // Подключение м
 
 const BookDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Получаем ID книги из URL
+  const dispatch = useDispatch<AppDispatch>();
 
+  const user = useSelector((state: RootState) => state.user); // Состояние пользователя из Redux
   const [book, setBook] = useState(null); // Локальное состояние для книги
   const [loading, setLoading] = useState(true); // Состояние загрузки
   const [error, setError] = useState<string | null>(null); // Состояние ошибки
+
+  // Проверяем наличие пользователя и загружаем его при необходимости
+  useEffect(() => {
+    if (!user.id) {
+      dispatch(fetchUser())
+        .unwrap()
+        .catch((err) => {
+          console.error('Failed to fetch user:', err);
+          setError('Failed to load user data.');
+        });
+    }
+  }, [dispatch, user.id]);
 
   // Фетчим книгу при монтировании компонента или изменении ID
   useEffect(() => {
@@ -33,17 +50,18 @@ const BookDetails: React.FC = () => {
       })
       .finally(() => setLoading(false));
   }, [id]);
-
   // Показываем сообщение об ошибке, если не удалось загрузить
   if (error) {
-    return <div>{error}</div>;
+    return <div className={classes.error}>{error}</div>;
   }
 
   // Показываем спиннер при загрузке
   if (loading) {
-    return           <div className={classes.spiner}>
-    <CircularProgress />
-  </div>;
+    return (
+      <div className={classes.spiner}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   // Показываем компонент NotFound, если книга не найдена

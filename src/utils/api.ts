@@ -38,7 +38,6 @@ export const updateFavorites = async (
     }
 
     const updatedUser = await response.json();
-    console.log('Updated Favorites:', updatedUser.Favorites);
     return updatedUser.Favorites; // Возвращаем обновлённый массив избранных
   } catch (error) {
     console.error('Error updating favorites:', error);
