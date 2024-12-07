@@ -3,23 +3,23 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store';
 import { fetchUser } from '../../store/slices/userSlice';
-import '../../assets/Fonts/fonts.scss'; // Подключение шрифтов
+import '../../assets/Fonts/fonts.scss';
 import AddToFavoritiesButton from '../FavorotiesButton/FavoritiesButton';
 import NotFound from '../NotFound/NotFound';
-import { fetchBookById } from '../../utils/api'; // Функция для фетчинга книги
+import { fetchBookById } from '../../utils/api';
 import { CircularProgress } from '@mui/material';
-let classes = require('./BookDetails.module.scss'); // Подключение модульных стилей
+let classes = require('./BookDetails.module.scss');
 
 const BookDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // Получаем ID книги из URL
+  const { id } = useParams<{ id: string }>(); //gets book id frpmo url
   const dispatch = useDispatch<AppDispatch>();
 
-  const user = useSelector((state: RootState) => state.user); // Состояние пользователя из Redux
-  const [book, setBook] = useState(null); // Локальное состояние для книги
-  const [loading, setLoading] = useState(true); // Состояние загрузки
-  const [error, setError] = useState<string | null>(null); // Состояние ошибки
+  const user = useSelector((state: RootState) => state.user);
+  const [book, setBook] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Проверяем наличие пользователя и загружаем его при необходимости
+  // Check for user presence and load it if necessary
   useEffect(() => {
     if (!user.id) {
       dispatch(fetchUser())
@@ -31,7 +31,7 @@ const BookDetails: React.FC = () => {
     }
   }, [dispatch, user.id]);
 
-  // Фетчим книгу при монтировании компонента или изменении ID
+  // Fetch the book when the component is mounted or the ID changes
   useEffect(() => {
     if (!id) {
       setError('Book ID is missing');
@@ -50,12 +50,10 @@ const BookDetails: React.FC = () => {
       })
       .finally(() => setLoading(false));
   }, [id]);
-  // Показываем сообщение об ошибке, если не удалось загрузить
   if (error) {
     return <div className={classes.error}>{error}</div>;
   }
 
-  // Показываем спиннер при загрузке
   if (loading) {
     return (
       <div className={classes.spiner}>
@@ -64,7 +62,6 @@ const BookDetails: React.FC = () => {
     );
   }
 
-  // Показываем компонент NotFound, если книга не найдена
   if (!book) {
     return <NotFound />;
   }

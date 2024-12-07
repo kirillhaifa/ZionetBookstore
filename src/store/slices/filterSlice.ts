@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FilterState {
-  query: string; // Строка поиска
-  genre: string; // Выбранный жанр (или 'All')
+  query: string; // input serach value
+  genre: string; // select genre value
 }
 
 const initialState: FilterState = {
-  query: '', // Изначально строка поиска пуста
-  genre: 'All', // Изначально выбран жанр "All"
+  query: '', 
+  genre: 'All',
 };
 
 const filterSlice = createSlice({
@@ -15,20 +15,18 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     setQuery: (state, action: PayloadAction<string>) => {
-      state.query = action.payload; // Обновляем строку поиска
+      state.query = action.payload; 
     },
     setGenre: (state, action: PayloadAction<string>) => {
-      state.genre = action.payload; // Обновляем выбранный жанр
+      state.genre = action.payload;
     },
     resetFilters: (state) => {
-      state.query = ''; // Сбрасываем строку поиска
-      state.genre = 'All'; // Сбрасываем выбранный жанр
+      state.query = '';
+      state.genre = 'All';
     },
   },
 });
 
-// Экспортируем экшены
 export const { setQuery, setGenre, resetFilters } = filterSlice.actions;
 
-// Экспортируем редюсер
 export default filterSlice.reducer;

@@ -12,6 +12,5 @@ export const store = configureStore({
   },
 });
 
-// Типизация корневого состояния
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

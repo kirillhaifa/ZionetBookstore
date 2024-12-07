@@ -1,6 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { User } from '../../types';
 
-// Асинхронный санк для загрузки пользователя
+// for updateFavorites thunk
+interface UpdateFavoritesPayload {
+  userId: string;
+  favorites: string[];
+}
+
+// thunk to load user
 export const fetchUser = createAsyncThunk('user/fetchUser', async (_, { rejectWithValue }) => {
   try {
     const response = await fetch('https://674f2c63bb559617b26e568b.mockapi.io/user');
@@ -14,10 +21,10 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async (_, { rejectWi
   }
 });
 
-// Асинхронный санк для обновления избранного
+// thunk to update favorities
 export const updateFavorites = createAsyncThunk(
   'user/updateFavorites',
-  async ({ userId, favorites }: { userId: string; favorites: string[] }, { rejectWithValue }) => {
+  async ({ userId, favorites }: UpdateFavoritesPayload, { rejectWithValue }) => {
     try {
       const response = await fetch(`https://674f2c63bb559617b26e568b.mockapi.io/user/${userId}`, {
         method: 'PUT',
@@ -32,22 +39,24 @@ export const updateFavorites = createAsyncThunk(
       }
 
       const updatedUser = await response.json();
-      return updatedUser.Favorites; // Возвращаем обновлённый массив избранных
+      return updatedUser.Favorites;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
+const initialState: User = {
+  id: null,
+  name: null,
+  favorites: [],
+  loading: false,
+  error: null,
+}
+
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    id: null,
-    name: null,
-    favorites: [],
-    loading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {
     logoutUser: (state) => {
       state.id = null;
@@ -59,7 +68,7 @@ const userSlice = createSlice({
     addFavoriteLocal: (state, action) => {
       const bookId = action.payload;
       if (!state.favorites.includes(bookId)) {
-        state.favorites.push(bookId); // Добавляем ID книги локально
+        state.favorites.push(bookId);
       }
     },
     removeFavoriteLocal: (state, action) => {
@@ -76,11 +85,11 @@ const userSlice = createSlice({
         state.loading = false;
         state.id = action.payload.id;
         state.name = action.payload.name;
-        state.favorites = action.payload.Favorites || []; // Сохраняем избранные книги
+        state.favorites = action.payload.Favorites || []; 
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Сохраняем сообщение об ошибке
+        state.error = action.payload as string; 
       })
       .addCase(updateFavorites.pending, (state) => {
         state.loading = true;
@@ -88,16 +97,15 @@ const userSlice = createSlice({
       })
       .addCase(updateFavorites.fulfilled, (state, action) => {
         state.loading = false;
-        state.favorites = action.payload; // Обновляем локальное избранное
+        state.favorites = action.payload;
       })
       .addCase(updateFavorites.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Сохраняем сообщение об ошибке
+        state.error = action.payload as string;
       });
   },
 });
 
-// Экспортируем действия для использования
 export const { logoutUser, addFavoriteLocal, removeFavoriteLocal } = userSlice.actions;
 
 export default userSlice.reducer;

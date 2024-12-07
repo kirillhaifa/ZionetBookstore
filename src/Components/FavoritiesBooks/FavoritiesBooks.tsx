@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { fetchBooks } from '../../store/slices/booksSlice';
@@ -14,6 +14,8 @@ const FavoritiesBooks = () => {
   const booksLoading = useSelector((state: RootState) => state.books.loading);
   const userLoading = useSelector((state: RootState) => state.user.loading);
 
+  //in case of reload of page there will be no books in store
+  //need to load them
   useEffect(() => {
     if (books.length === 0) {
       dispatch(fetchBooks())
@@ -22,7 +24,7 @@ const FavoritiesBooks = () => {
     }
   }, []);
 
-  // Если данные еще загружаются, показываем спиннер
+  // loading spiner
   if (booksLoading || userLoading) {
     return (
       <div className={classes.spinner}>
@@ -31,7 +33,7 @@ const FavoritiesBooks = () => {
     );
   }
 
-  // Фильтруем книги только если и пользователь, и книги загружены
+  // filtering book when both booklist and user are in store
   const favoritiesBooks =
     books.length > 0 && user.favorites.length > 0
       ? books.filter((book) => user.favorites.includes(book.id))

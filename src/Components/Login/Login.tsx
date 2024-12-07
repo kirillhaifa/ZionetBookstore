@@ -13,6 +13,7 @@ const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  //any email and password makes fetch user, fake auth
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     
@@ -29,6 +30,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className={classes.container}>
+      {/* form from mui library */}
       <Box
         component="form"
         onSubmit={handleSubmit}

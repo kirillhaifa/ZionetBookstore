@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { CircularProgress, Grid2 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
@@ -13,6 +13,9 @@ import { PiSmileySad } from 'react-icons/pi';
 
 let classes = require('./BooklistWithFilters.module.scss');
 
+
+// combination of filtes and booklist, possibly could be a page component 
+// but was made as component because any ather page component aren't needed
 const BooklistWithFilters = () => {
   const dispatch = useDispatch<AppDispatch>();
   const books = useSelector((state: RootState) => state.books.books);
@@ -23,20 +26,21 @@ const BooklistWithFilters = () => {
   const allBooksLoaded = useSelector(
     (state: RootState) => state.books.allBooksLoaded,
   );
-  const query = useSelector((state: RootState) => state.filter.query); // Поисковый запрос
-  const genre = useSelector((state: RootState) => state.filter.genre); // Фильтр по жанру
+  const query = useSelector((state: RootState) => state.filter.query);
+  const genre = useSelector((state: RootState) => state.filter.genre);
+  // component for endless scroll
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-  const booksPerPage = 10;
+  const booksPerPage = 10; //number of books loaded per fetch
 
-  // Загружаем первую порцию книг, если список пуст
+  //load first part if booklist is empty
   useEffect(() => {
     if (books.length === 0 && !allBooksLoaded) {
       dispatch(fetchBooksInRange({ start: 0, end: booksPerPage }));
     }
   }, [dispatch, books.length, allBooksLoaded]);
 
-  // Настраиваем IntersectionObserver для подгрузки книг
+  // IntersectionObserver fot endless scroll
   useEffect(() => {
     if (!sentinelRef.current || booksLoading || allBooksLoaded) return;
 
@@ -54,7 +58,7 @@ const BooklistWithFilters = () => {
     return () => observer.disconnect();
   }, [booksLoading, allBooksLoaded, dispatch]);
 
-  // Загружаем следующую порцию книг при изменении currentPage
+  // load next part of books when currentPage changes
   useEffect(() => {
     if (currentPage > 0 && !allBooksLoaded) {
       const start = currentPage * booksPerPage;
@@ -64,7 +68,7 @@ const BooklistWithFilters = () => {
     }
   }, [currentPage, dispatch, booksPerPage, allBooksLoaded]);
 
-  // Мемоизируем фильтрацию книг
+  // filtred books
   const filteredBooks = useMemo(() => {
     return books.filter((book) => {
       const matchesQuery =

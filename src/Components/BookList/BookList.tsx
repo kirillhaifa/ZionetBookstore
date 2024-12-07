@@ -2,14 +2,13 @@ import React from 'react';
 import BookCard from '../BookCard/BookCard';
 import { Grid2 } from '@mui/material';
 import { Book } from '../../types';
-import SearchInput from '../SearchInput/SearchInput';
-import GenreFilter from '../GenreSelect/GenreSelect';
 let classes = require('./BookList.module.scss');
 
 interface BookListProps {
-  books: Book[]; // Пропс `books` должен быть массивом книг
+  books: Book[]; 
 }
 
+//universal booklist component
 const BookList: React.FC<BookListProps> = ({ books }) => {
   return (
       <div className={classes.container_booklist}>

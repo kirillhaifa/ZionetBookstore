@@ -1,6 +1,7 @@
 import React from 'react';
-import '../../assets/Fonts/fonts.scss'; 
-let classes = require('./Footer.module.scss'); 
+import '../../assets/Fonts/fonts.scss';
+let classes = require('./Footer.module.scss');
+
 const Footer: React.FC = () => {
   return (
     <footer className={classes.footer}>

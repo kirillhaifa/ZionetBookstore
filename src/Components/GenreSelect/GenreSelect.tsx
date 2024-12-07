@@ -11,20 +11,21 @@ import {
 import { setGenre } from '../../store/slices/filterSlice';
 let classes = require('./GenreSelect.module.scss');
 
+//genre select filter. uses store for value
 const GenreFilter: React.FC = () => {
   const dispatch = useDispatch();
-  const genre = useSelector((state: RootState) => state.filter.genre); // Достаем значение из слайса
+  const genre = useSelector((state: RootState) => state.filter.genre);
 
   const handleChange = (event: SelectChangeEvent) => {
-    dispatch(setGenre(event.target.value)); // Обновляем значение в слайсе
+    dispatch(setGenre(event.target.value));
   };
 
   return (
     <Box className={classes.filterContainer}>
       <FormControl fullWidth>
         <Select
-          value={genre} // Берем значение из слайса
-          onChange={handleChange} // Обработчик изменения
+          value={genre}
+          onChange={handleChange}
           className={classes.genreSelect}
           displayEmpty
         >

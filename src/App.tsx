@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from 'react-router-dom';
 import { RootState, AppDispatch } from './store';
 import { fetchUser } from './store/slices/userSlice';
@@ -28,6 +27,7 @@ const App: React.FC = () => {
     }
   }, [dispatch]);
 
+  //errros displaying
   if (booksError || userError) {
     return (
       <Layout>
@@ -41,7 +41,8 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <Layout>
+      {/* Layoutis a combination of header, navigation and footer */}
+      <Layout> 
         <Routes>
           <Route path="/" element={<BooklistWithFilters />} />
           <Route path="/login" element={<LoginForm />} />

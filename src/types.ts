@@ -7,3 +7,11 @@ export interface Book {
   rating: string;
   publishedYear: string;
 }
+
+export interface User {
+  id: string | null;
+  name: string | null;
+  favorites: string[];
+  loading: boolean;
+  error: string | null;
+}

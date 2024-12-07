@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoHomeOutline } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa6";
@@ -9,6 +8,7 @@ let classes = require('./Navigation.module.scss')
 
 const NavigationBar = () => {
   const navigate = useNavigate();
+  //user to check if vaorities button navigates to favs or login
   const user = useSelector((state: RootState) => state.user.id);
 
   return (

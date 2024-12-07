@@ -1,3 +1,5 @@
+//collection of funtions, not all are needed 
+
 export function toCamelCase(str: string): string {
   return str
     .replace(/\s(.)/g, function (match, group1) {

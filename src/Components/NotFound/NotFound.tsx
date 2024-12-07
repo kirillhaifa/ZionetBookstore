@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Box, Typography } from '@mui/material';
 import { PiSmileySad } from "react-icons/pi";
 let classes = require('./NotFound.module.scss')
 
+//component for wrong url 
 const NotFound: React.FC = () => {
   return (
     <Box

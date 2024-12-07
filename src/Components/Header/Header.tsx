@@ -7,15 +7,16 @@ import { GoBook } from 'react-icons/go';
 import { FaRegUser } from 'react-icons/fa6';
 import { MdOutlineLogout } from 'react-icons/md';
 import { MdOutlineLogin } from 'react-icons/md';
-
-import '../../assets/Fonts/fonts.scss'; //module overtake global styles
 let classes = require('./Header.module.scss');
+
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const user = useSelector((state: RootState) => state.user);
 
+  //clean store and cookie in case of logout, navigate to home page
+  //instead of auth
   const handleLogout = () => {
     dispatch(logoutUser());
     document.cookie = "authorized=; path=/; max-age=0";
@@ -44,6 +45,7 @@ const Header: React.FC = () => {
             </button>
           </div>
         ) : (
+          // if no user in store - login button
           location.pathname !== '/login' && (
             <button
               className={classes.login}

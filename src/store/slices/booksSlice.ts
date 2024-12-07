@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Book } from '../../types';
 
+//fetch all books from store
+//rather unsafe because it can be anormous number
+//but ok for our mock data
 export const fetchBooks = createAsyncThunk(
   'books/fetchBooks',
   async (_, { rejectWithValue }) => {
@@ -18,6 +21,7 @@ export const fetchBooks = createAsyncThunk(
   },
 );
 
+//fetch 10 new book
 export const fetchBooksInRange = createAsyncThunk(
   'books/fetchBooksInRange',
   async (
@@ -46,12 +50,10 @@ export const fetchBooksInRange = createAsyncThunk(
         currentPage += 1;
 
         if (data.length < limit) {
-          // Если получили меньше, чем `limit`, значит, книг больше нет
           break;
         }
       }
 
-      // Обрезаем книги до точного диапазона
       return books.slice(start % limit, (start % limit) + totalBooksToLoad);
     } catch (error: any) {
       return rejectWithValue(error.message);
@@ -60,11 +62,12 @@ export const fetchBooksInRange = createAsyncThunk(
 );
 
 interface BooksState {
-  books: Book[]; // Загруженные книги
-  loading: boolean; // Состояние загрузки
-  error: string | null; // Ошибки загрузки
-  allBooksLoaded: boolean; // Индикатор завершения загрузки
-  currentPage: number; // Текущая страница
+  books: Book[]; // array of loaded books
+  loading: boolean; // loading state
+  error: string | null; // errors
+  allBooksLoaded: boolean; // flag for case when all books 
+  // are loaded to prevent new fetchs
+  currentPage: number; // current page
 }
 
 const initialState: BooksState = {
@@ -72,7 +75,7 @@ const initialState: BooksState = {
   loading: false,
   error: null,
   allBooksLoaded: false,
-  currentPage: 0, // Начальная страница
+  currentPage: 0, 
 };
 
 const booksSlice = createSlice({
@@ -80,7 +83,7 @@ const booksSlice = createSlice({
   initialState,
   reducers: {
     incrementPage(state) {
-      state.currentPage += 1; // Увеличиваем страницу
+      state.currentPage += 1;
     },
     resetBooksState(state) {
       state.books = [];
@@ -97,14 +100,15 @@ const booksSlice = createSlice({
       .addCase(fetchBooksInRange.fulfilled, (state, action) => {
         state.loading = false;
 
-        // Добавляем уникальные книги
-        const newBooks = action.payload.filter(
-          (book) =>
-            !state.books.some((existingBook) => existingBook.id === book.id),
-        );
-        state.books = [...state.books, ...newBooks];
+        // possible check for unique books but anneccary for our mock data
+        
+        // const newBooks = action.payload.filter(
+        //   (book) =>
+        //     !state.books.some((existingBook) => existingBook.id === book.id),
+        // );
 
-        // Проверяем, загружены ли все книги
+        state.books = [...state.books, ...action.payload];
+
         if (action.payload.length < (action.meta.arg?.limit || 10)) {
           state.allBooksLoaded = true;
         }
@@ -119,8 +123,8 @@ const booksSlice = createSlice({
       })
       .addCase(fetchBooks.fulfilled, (state, action) => {
         state.loading = false;
-        state.books = action.payload; // Сохраняем все книги
-        state.allBooksLoaded = true; // Помечаем, что все книги загружены
+        state.books = action.payload;
+        state.allBooksLoaded = true;
       })
       .addCase(fetchBooks.rejected, (state, action) => {
         state.loading = false;

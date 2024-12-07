@@ -7,8 +7,10 @@ let classes = require('./SearchInput.module.scss');
 
 const SearchInput: React.FC = () => {
   const dispatch = useDispatch();
-  const query = useSelector((state: RootState) => state.filter.query); // Получаем строку поиска из слайса
+  //input string from store
+  const query = useSelector((state: RootState) => state.filter.query);
 
+  //in case of change dispatch new string
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setQuery(event.target.value)); // Обновляем значение строки поиска в слайсе
   };
@@ -18,11 +20,11 @@ const SearchInput: React.FC = () => {
       <FormControl fullWidth>
         <input
           type="text"
-          value={query} // Значение из Redux
-          onChange={handleInputChange} // Обработчик изменения
+          value={query}
+          onChange={handleInputChange}
           placeholder="Enter author or book name"
-          className={classes.input_field} // Стили из SCSS
-          data-testid="search-input" // Добавляем data-testid для поля ввода
+          className={classes.input_field}
+          data-testid="search-input"
         />
       </FormControl>
     </div>
