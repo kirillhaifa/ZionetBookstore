@@ -14,7 +14,7 @@ const BookList: React.FC<BookListProps> = ({ books }) => {
       <div className={classes.container_booklist}>
         <Grid2 container spacing={1} justifyContent="center" margin="auto">
           {books.map((book) => (
-            <BookCard book={book} key={book.id} />
+            <BookCard book={book} key={book.id + Math.random()} />
           ))}
         </Grid2>
       </div>

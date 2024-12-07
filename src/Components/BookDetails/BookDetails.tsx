@@ -10,7 +10,7 @@ import { fetchBookById } from '../../utils/api';
 import { CircularProgress } from '@mui/material';
 let classes = require('./BookDetails.module.scss');
 
-const BookDetails: React.FC = () => {
+const BookDetails= () => {
   const { id } = useParams<{ id: string }>(); //gets book id frpmo url
   const dispatch = useDispatch<AppDispatch>();
 
@@ -21,13 +21,22 @@ const BookDetails: React.FC = () => {
 
   // Check for user presence and load it if necessary
   useEffect(() => {
+    //if no user in store we checks cokkie
     if (!user.id) {
-      dispatch(fetchUser())
-        .unwrap()
-        .catch((err) => {
-          console.error('Failed to fetch user:', err);
-          setError('Failed to load user data.');
-        });
+      const isCookieAuthorized = document.cookie
+        .split('; ')
+        .some((cookie) => cookie === 'authorized=true');
+
+      if (isCookieAuthorized) {
+        //if there is a cokkie we fetch user
+        setLoading(true);
+        dispatch(fetchUser())
+          .unwrap()
+          .catch((err) => {
+            console.error('Failed to fetch user:', err);
+          })
+          .finally(() => setLoading(false));
+      }
     }
   }, [dispatch, user.id]);
 
@@ -50,6 +59,7 @@ const BookDetails: React.FC = () => {
       })
       .finally(() => setLoading(false));
   }, [id]);
+  
   if (error) {
     return <div className={classes.error}>{error}</div>;
   }

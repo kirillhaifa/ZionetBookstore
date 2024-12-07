@@ -37,6 +37,7 @@ src/
 package.json            # Project dependencies and scripts
 tsconfig.json           # TypeScript configuration
 webpack.config.js       # Webpack bundler configuration
+etc
 ```
 
 
@@ -44,7 +45,8 @@ webpack.config.js       # Webpack bundler configuration
 
 ## Scripts
 - npm start - Starts the development server.
--  npm run build - Builds the project for production.
+- npm run build - Builds the project for production.
+- npm run test - cypress test
 
 ---
 
@@ -55,6 +57,12 @@ webpack.config.js       # Webpack bundler configuration
 - SCSS: CSS preprocessor for modular styles.
 - Material-UI: UI component library.
 - Webpack: Module bundler.
+- Framer Motion: Animation library for React.
+- React Icons: Icon library for React.
+- React Router DOM: Routing library for React.
+- Cypress: End-to-end testing framework.
+- ESLint: Linter for JavaScript and TypeScript.
+- Prettier: Code formatter.
 
 ---
 

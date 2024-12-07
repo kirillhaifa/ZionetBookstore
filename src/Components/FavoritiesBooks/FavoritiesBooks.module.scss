@@ -12,8 +12,15 @@
   padding-top: 20px;
 }
 
-.spiner {
+.spinner_container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.spinner {
   width: 100%;
   margin: auto;
-  padding-top: 30px;
+  padding-top: 50px;
 }

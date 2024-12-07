@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { fetchBooks } from '../../store/slices/booksSlice';
-import BookList from '../../Components/BookList/BookList';
+import BookList from '../BookList/BookList';
 import { CircularProgress } from '@mui/material';
 
 let classes = require('./FavoritiesBooks.module.scss');
@@ -27,8 +27,8 @@ const FavoritiesBooks = () => {
   // loading spiner
   if (booksLoading || userLoading) {
     return (
-      <div className={classes.spinner}>
-        <CircularProgress />
+      <div className={classes.spinner_container}>
+        <CircularProgress className={classes.spinner}/>
       </div>
     );
   }

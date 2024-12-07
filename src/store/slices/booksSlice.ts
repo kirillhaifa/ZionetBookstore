@@ -100,14 +100,14 @@ const booksSlice = createSlice({
       .addCase(fetchBooksInRange.fulfilled, (state, action) => {
         state.loading = false;
 
-        // possible check for unique books but anneccary for our mock data
+        // check for unique books but anneccary for our mock data
         
-        // const newBooks = action.payload.filter(
-        //   (book) =>
-        //     !state.books.some((existingBook) => existingBook.id === book.id),
-        // );
+        const newBooks = action.payload.filter(
+          (book) =>
+            !state.books.some((existingBook) => existingBook.id === book.id),
+        );
 
-        state.books = [...state.books, ...action.payload];
+        state.books = [...state.books, ...newBooks];
 
         if (action.payload.length < (action.meta.arg?.limit || 10)) {
           state.allBooksLoaded = true;

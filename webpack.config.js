@@ -1,17 +1,17 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin'); // Минификация JS
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); // Минификация CSS
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin'); // Сжатие изображений
+const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin'); // Подключаем CleanWebpackPlugin
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js', // Хеширование для предотвращения кеширования
-    publicPath: '/', // Указывает корневой путь для статических файлов
+    filename: '[name].[contenthash].js',
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -23,7 +23,6 @@ module.exports = {
         use: ['@svgr/webpack'],
       },
       {
-        // Для SCSS-модулей
         test: /\.module\.scss$/,
         use: [
           'style-loader',
@@ -31,7 +30,7 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: '[path]__[local]--[hash:base64:5]', // Генерирует имя класса с путем, именем файла и хешем
+                localIdentName: '[path]__[local]--[hash:base64:5]',
               },
               sourceMap: true,
             },
@@ -40,7 +39,6 @@ module.exports = {
         ],
       },
       {
-        // Для обычных SCSS файлов (не модульных)
         test: /\.scss$/,
         exclude: /\.module\.scss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
@@ -51,34 +49,30 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        // Для обработки изображений и иконок
         test: /\.(ico|png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'img/[name][ext]', // Копирует файлы в папку dist/img
+          filename: 'img/[name][ext]',
         },
       },
     ],
   },
   optimization: {
-    minimize: true, // Минификация
-    minimizer: [
-      new TerserPlugin(), // Минификация JavaScript
-      new CssMinimizerPlugin(), // Минификация CSS
-    ],
+    minimize: true,
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
     splitChunks: {
-      chunks: 'all', // Code splitting
+      chunks: 'all',
     },
   },
   plugins: [
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!img/**/*'], // Удаляет все, кроме img
+    }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
-    new Dotenv(),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: 'public/img', to: 'img' }, // Копируем файлы из public/img в dist/img
-      ],
+      patterns: [{ from: 'public/img', to: 'img' }],
     }),
     new ImageMinimizerPlugin({
       minimizer: {
@@ -97,10 +91,12 @@ module.exports = {
     hot: true,
     watchFiles: ['src/**/*.scss', 'src/**/*.css'],
     port: 3000,
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
   },
   performance: {
-    maxAssetSize: 512000, // Увеличение порога для предупреждений о размере ассетов
-    maxEntrypointSize: 512000, // Увеличение порога для предупреждений о точках входа
+    maxAssetSize: 1000000,
+    maxEntrypointSize: 1000000,
   },
 };
